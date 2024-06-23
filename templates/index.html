@@ -16,25 +16,26 @@
             <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}"><h1>ANIME SLAYER </h1></a>
         </div>
         <ul class="menu">
+            <form action="/search" method="GET" style="display: flex;justify-content: space-between;"><input name="n" type="search"><input style="color: black;background-color: white; border: solid 1px; padding: 10px;" type="submit" value="search"></form>
             <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}"><li class="menu-item"><span class="icon">🔥</span>اخر التحديثات</li></a>
-            <li class="menu-item"><span class="icon">📋</span>لائحة الانمي</li>
-            <li class="menu-item"><span class="icon">📅</span>المواسم</li>
-            <li class="menu-item"><span class="icon">🌍</span>التقييم العالمي</li>
-            <li class="menu-item"><span class="icon">📈</span>التقييم العربي</li>
+            <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}/AnimeList"><li class="menu-item"><span class="icon">📋</span>لائحة الانمي</li></a>
+            <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}/top_anime_mal"><li class="menu-item"><span class="icon">🌍</span>التقييم العالمي</li></a>
+            <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}/top_anime"><li class="menu-item"><span class="icon">📈</span>التقييم العربي</li></a>
             <li class="menu-item"><span class="icon">📚</span>قائمتي</li>
             <li class="menu-item"><span class="icon">❤️</span>أنمايي المفضلة</li>
         </ul>
     </div>
     <div class="content">
         <div class="header">
-            <h1>اخر التحديثات</h1>
+            <h1>{{maintitle}}</h1>
         </div>
-            <div class="gallery">
+        <div class="gallery">
                 {{card_html | safe}}
             </div>
+           {% if page != -1 %}
             <div class="pagination" style="text-align: center;">
                 {% if page > 1 %}
-                    <a href="/?page={{ page - 1 }}">&laquo; Previous</a>
+                    <a href="?page={{ page - 1 }}">&laquo; Previous</a>
                 {% else %}
                     <span class="disabled">&laquo; Previous</span>
                 {% endif %}
@@ -43,20 +44,23 @@
                     {% if p == page %}
                         <span class="current">{{ p }}</span>
                     {% else %}
-                        <a href="/?page={{ p }}">{{ p }}</a>
+                        <a href="?page={{ p }}">{{ p }}</a>
                     {% endif %}
                 {% endfor %}
                 
                 {% if page < total_pages %}
-                    <a href="/?page={{ page + 1 }}">Next &raquo;</a>
+                    <a href="?page={{ page + 1 }}">Next &raquo;</a>
                 {% else %}
                     <span class="disabled">Next &raquo;</span>
                 {% endif %}
-            </div>
-            
+        </div>
+            {% endif %}
             
             
         </div>
+        <a href="#"><div class="header">
+            <p>Akram.Exe Anime Slayer © {{year}}</p>
+        </div></a>
     </div>
     <script src="{{ url_for('static', filename='css/styles.css') }}"></script>
 </body>

@@ -2,6 +2,9 @@ from flask import Flask, render_template, render_template_string , request
 import requests
 import json
 import base64
+import datetime
+
+
 def getIp() :
     return str(requests.get("http://ip-api.com/json").json()["query"])
 ip = getIp()
@@ -15,12 +18,79 @@ def getPublishedAnimeByLast(page):
         "client-secret":"7befba6263cc14c90d2f1d6da2c5cf9b251bfbbd",
         "user-agent": "okhttp/3.12.13"
     }
-    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*20}'+',"_limit":20,"_order_by":"latest_first","list_type":"latest_updated_episode_new","just_info":"Yes"}' , headers=headers)
+    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*30}'+',"_limit":30,"_order_by":"latest_first","list_type":"latest_updated_episode_new","just_info":"Yes"}' , headers=headers)
     if req.status_code == 200 :
         return (req.json()["response"]["data"])
     else :
         print("ERROR IN getPublishedAnimeByLast status code not equal to 200")
         exit()
+
+def getPublishedAnimeALL(page):
+   
+    
+    headers = {
+        "client-id":"android-app2",
+        "client-secret":"7befba6263cc14c90d2f1d6da2c5cf9b251bfbbd",
+        "user-agent": "okhttp/3.12.13"
+    }
+    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*30}'+',"_limit":30,"_order_by":"latest_first","list_type":"anime_list","just_info":"Yes"}' , headers=headers)
+    if req.status_code == 200 :
+        return (req.json()["response"]["data"])
+    else :
+        print("ERROR IN getPublishedAnimeByLast status code not equal to 200")
+        exit()
+
+
+def getPublishedAnimeRatingMal(page):
+   
+    
+    headers = {
+        "client-id":"android-app2",
+        "client-secret":"7befba6263cc14c90d2f1d6da2c5cf9b251bfbbd",
+        "user-agent": "okhttp/3.12.13"
+    }
+    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*30}'+',"_limit":30,"_order_by":"latest_first","list_type":"top_anime_mal","just_info":"Yes"}' , headers=headers)
+    if req.status_code == 200 :
+        return (req.json()["response"]["data"])
+    else :
+        print("ERROR IN getPublishedAnimeByLast status code not equal to 200")
+        exit()
+
+
+def getPublishedAnimeRating(page):
+   
+    
+    headers = {
+        "client-id":"android-app2",
+        "client-secret":"7befba6263cc14c90d2f1d6da2c5cf9b251bfbbd",
+        "user-agent": "okhttp/3.12.13"
+    }
+    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*30}'+',"_limit":30,"_order_by":"latest_first","list_type":"top_anime","just_info":"Yes"}' , headers=headers)
+    if req.status_code == 200 :
+        return (req.json()["response"]["data"])
+    else :
+        print(req.text)
+        print('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":'+f'{page*30}'+',"_limit":30,"_order_by":"latest_first","list_type":"top_anime","just_info":"Yes"}')
+        print("ERROR IN getPublishedAnimeByLast status code not equal to 200")
+        exit()
+
+def getByName(name):
+   
+    
+    headers = {
+        "client-id":"android-app2",
+        "client-secret":"7befba6263cc14c90d2f1d6da2c5cf9b251bfbbd",
+        "user-agent": "okhttp/3.12.13"
+    }
+    req = requests.get('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":0,"_limit":100,"_order_by":"latest_first","list_type":"top_anime","anime_name":"'+str(name)+'","just_info":"Yes"}' , headers=headers)
+    if req.status_code == 200 :
+        return (req.json()["response"]["data"])
+    else :
+        #print(req.text)
+        print('https://anslayer.com/anime/public/animes/get-published-animes?json={"_offset":0,"_limit":100,"_order_by":"latest_first","list_type":"top_anime","anime_name":"'+str(name)+'","just_info":"Yes"}' )
+        print("ERROR IN getPublishedAnimeByLast status code not equal to 200")
+        exit()
+
 
 def getAnimeDetails(id):
     headers = {
@@ -57,18 +127,78 @@ def episodeCardGen(ep, epn, anime_id):
     </form>
     """
 app = Flask(__name__)
-
+def getYear():
+    return datetime.datetime.now().year
 @app.route("/",)
 def home():
     page = request.args.get('page', 1, type=int)
-    per_page = 5
-    total = 30
+    per_page = 30
+    total = 3000
     total_pages = (total + per_page - 1) // per_page
 
     card_html = ""
     for card in getPublishedAnimeByLast(page) :
         card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],card["latest_episode_name"],card["anime_rating"],card["anime_id"])
-    return render_template('index.html', card_html=card_html , page = page , total_pages = total_pages)
+    return render_template('index.html',year=getYear(),maintitle="اخر التحديثات" ,card_html=card_html , page = page , total_pages = total_pages)
+
+
+@app.route("/AnimeList",)
+def AnimeList():
+    page = request.args.get('page', 1, type=int)
+    per_page = 30
+    total = 3000
+    total_pages = (total + per_page - 1) // per_page
+    
+    card_html = ""
+   # return getPublishedAnimeALL(page) 
+    for card in getPublishedAnimeALL(page) :
+        card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],"",card["anime_rating"],card["anime_id"])
+    return render_template('index.html',year=getYear(),maintitle="لائحة الانمي" ,card_html=card_html , page = page , total_pages = total_pages)
+
+
+@app.route("/top_anime_mal",)
+def RatingMal():
+    page = request.args.get('page', 1, type=int)
+    per_page = 30
+    total = 3000
+    total_pages = (total + per_page - 1) // per_page
+
+    card_html = ""
+   #return getPublishedAnimeRatingMal(page) 
+    for card in getPublishedAnimeRatingMal(page) :
+        card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],"","",card["anime_id"])
+    return render_template('index.html',year=getYear(),maintitle="التقييم العالمي" ,card_html=card_html , page = page , total_pages = total_pages)
+
+
+@app.route("/top_anime",)
+def TopRating():
+    page = request.args.get('page', 1, type=int)
+    per_page = 30
+    total = 3000
+    total_pages = (total + per_page - 1) // per_page
+
+    card_html = ""
+    #return getPublishedAnimeRating(page)
+    for card in getPublishedAnimeRating(page) :
+        card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],"",card["anime_rating"],card["anime_id"])
+    return render_template('index.html',year=getYear(),maintitle="التقييم العربي" ,card_html=card_html , page = page , total_pages = total_pages)
+
+@app.route("/search",)
+def search():
+    psearch = request.args.get('n', 1, type=str)
+    per_page = 100
+    page = -1
+    total = 100
+    total_pages = (total + per_page - 1) // per_page
+
+    card_html = ""
+    #return getPublishedAnimeRating(page)
+    try : 
+        for card in getByName(psearch) :
+            card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],"",card["anime_rating"],card["anime_id"])
+        return render_template('index.html',year=getYear(),maintitle=f"result for : {psearch}" ,card_html=card_html , page = page , total_pages = total_pages)
+    except : 
+        return TopRating()
 
 @app.route("/get-anime-details=<id>")
 def getAnimeDetailsFlask(id):
