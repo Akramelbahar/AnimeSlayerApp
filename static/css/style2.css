@@ -1,0 +1,65 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.details, .episodes {
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+ul {
+
+    list-style: none;
+    padding: 0;
+}
+
+#epUL {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3 columns or more if space allows */
+    gap: 10px; 
+}
+
+@media (max-width: 480px) {
+    #epUL {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        justify-items: center;
+        
+    }
+}
+
+button {
+
+    all: unset}
+ul li {
+    background: #e0e0e0;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+

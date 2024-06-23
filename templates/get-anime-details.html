@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tensei Shitara Slime Datta Ken 3rd Season</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    direction: rtl;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.details, .episodes {
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 20px;
+}
+
+ul {
+
+    list-style: none;
+    padding: 0;
+}
+
+#epUL {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 3 columns or more if space allows */
+    gap: 10px; 
+}
+
+@media (max-width: 480px) {
+    #epUL {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        align-content: center;
+        justify-items: center;
+        
+    }
+}
+a {
+  text-decoration: none;
+  color: inherit    ;
+}
+button {
+
+    all: unset}
+ul li {
+    background: #e0e0e0;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+
+    </style>
+</head>
+<body>
+    <div class="navbar" style="display: flex;background-color: #333; justify-content: space-between;color: white;;">
+        <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}" style="margin: 0 30px 0 30px;"><h1 style="color:white">ANIME SLAYER</h1></a>
+        <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}" style="margin: 0 30px 0 30px;"><h1 style="color:white">&larr;</h1></a>
+    </div>
+    <div class="container">
+        <div class="details">
+            <div style="display: flex; flex-direction: row-reverse;justify-items: center;justify-content: space-between;align-items: center;align-content: space-between; "><h2>{{anime_name}}</h2>
+            <img src="{{cover}}" alt="{{anime_name}}" style="max-width: 150px;"></div>
+            <p>التفاصيل</p>
+            <ul>
+                <li>موعد الصدور: {{season}}</li>
+                <li>عدد الحلقات: {{ep_count}}</li>
+                <li> تصنيف العمر:{{age_rating}}</li>
+                <li>التقييم:{{anime_rating}}⭐</li>
+                <li>مدة الحلقة: 24 دقيقة</li>
+                <li>التصنيف: {{genres}}</li>
+            </ul>
+        </div>
+        <div class="episodes">
+            <h2>الحلقات</h2>
+            <ul id="epUL">
+               {{episodeCard | safe}}
+                
+            </ul>
+        </div>
+        
+    </div>
+    <script src="scripts.js"></script>
+</body>
+</html>

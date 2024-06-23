@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Video Player</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #121212;
+            color: white;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            position: relative;
+            min-width: 1080;
+            margin: 20px 0;
+        }
+        video {
+            width: 1080;
+            height: auto;
+            border-radius: 10px;
+            background-color: black;
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .button-container a {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #007BFF;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .button-container button:hover {
+            background-color: #0056b3;
+        }
+        .button-container a:hover {
+            background-color: #0056b3;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .video-container:hover .controls {
+            opacity: 1;
+        }
+        .controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin: 0 10px;
+        }
+        .controls button:hover {
+            color: #007BFF;
+        }
+        .progress-bar {
+            flex: 1;
+            height: 5px;
+            background: #555;
+            border-radius: 2.5px;
+            margin: 0 10px;
+            cursor: pointer;
+        }
+        .progress-bar div {
+            width: 0;
+            height: 100%;
+            background: #007BFF;
+            border-radius: 2.5px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var videoPlayer = document.getElementById("videoPlayer");
+            var progressBar = document.querySelector(".progress-bar");
+            var progress = document.querySelector(".progress-bar div");
+
+            videoPlayer.addEventListener("timeupdate", function() {
+                var percentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                progress.style.width = percentage + "%";
+            });
+
+            progressBar.addEventListener("click", function(e) {
+                var newTime = e.offsetX / progressBar.offsetWidth;
+                videoPlayer.currentTime = newTime * videoPlayer.duration;
+            });
+        });
+
+        function changeVideo(source) {
+            var videoPlayer = document.getElementById("videoPlayer");
+            videoPlayer.src = source;
+            videoPlayer.play();
+        }
+    </script>
+</head>
+<body>
+    <a href="{{request.base_url.split('/')[0]}}//{{request.base_url.split('/')[2]}}"><h1>ANIME SLAYER </h1></a>
+    <div class="video-container">
+        <iframe  id="videoPlayer" width="800" height="600" allowfullscreen allowtransparency allow="autoplay" scrolling="no" frameborder="0" src="{{ video_sources[0] }}" >
+        </iframe>
+        <h3 style="color:black;text-align:center">Stream</h3>
+    <div class="button-container">
+     
+        {% for i in range(l) %}
+            <button onclick="changeVideo('{{ video_sources[i] }}')">Server {{i}}</button>
+        {% endfor %}
+    </div>
+    <h3 style="color:black;text-align:center">Download</h3>
+    <div class="button-container">
+     
+      {% for i in range(l) %}
+          <a href="{{ video_sources[i] }}">{{ video_sources[i].split("/")[2]}}</a>
+      {% endfor %}
+  </div>
+   </div>
+   <div style="color :black">{{second | safe}}<div>
+</body>
+</html>
+
