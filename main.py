@@ -140,6 +140,7 @@ def home():
     for card in getPublishedAnimeByLast(page) :
         card_html= card_html + cardGen(card["anime_cover_image_url"],card["anime_name"],card["latest_episode_name"],card["anime_rating"],card["anime_id"])
     return render_template('index.html',year=getYear(),maintitle="اخر التحديثات" ,card_html=card_html , page = page , total_pages = total_pages)
+    return getPublishedAnimeByLast(page)
 
 
 @app.route("/AnimeList",)
@@ -253,4 +254,4 @@ def watch(id):
     
     return render_template("/watchPage.html" , video_sources=urls , l = l,second= getAnimeDetailsFlask(id))
 if __name__ == "__main__":
-    app.run(debug=True , host=0.0.0.0)
+    app.run(debug=True , host="0.0.0.0")
